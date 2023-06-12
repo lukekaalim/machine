@@ -1,0 +1,203 @@
+[
+  {
+    "type": "push",
+    "value": 83
+  },
+  {
+    "type": "push",
+    "value": 116
+  },
+  {
+    "type": "push",
+    "value": 97
+  },
+  {
+    "type": "push",
+    "value": 114
+  },
+  {
+    "type": "push",
+    "value": 116
+  },
+  {
+    "type": "push",
+    "value": 105
+  },
+  {
+    "type": "push",
+    "value": 110
+  },
+  {
+    "type": "push",
+    "value": 103
+  },
+  {
+    "type": "push",
+    "value": 32
+  },
+  {
+    "type": "push",
+    "value": 112
+  },
+  {
+    "type": "push",
+    "value": 114
+  },
+  {
+    "type": "push",
+    "value": 111
+  },
+  {
+    "type": "push",
+    "value": 103
+  },
+  {
+    "type": "push",
+    "value": 114
+  },
+  {
+    "type": "push",
+    "value": 97
+  },
+  {
+    "type": "push",
+    "value": 109
+  },
+  {
+    "type": "push",
+    "value": 32
+  },
+  {
+    "type": "push",
+    "value": 45
+  },
+  {
+    "type": "push",
+    "value": 45
+  },
+  {
+    "type": "push",
+    "value": 62
+  },
+  {
+    "type": "push",
+    "value": 62
+  },
+  {
+    "type": "push",
+    "value": 21
+  },
+  {
+    "type": "push",
+    "value": 0
+  },
+  {
+    "type": "system"
+  },
+  {
+    "type": "push",
+    "value": 45
+  },
+  {
+    "type": "push",
+    "value": 45
+  },
+  {
+    "type": "push",
+    "value": 124
+  },
+  {
+    "type": "push",
+    "value": 124
+  },
+  {
+    "type": "push",
+    "value": 32
+  },
+  {
+    "type": "push",
+    "value": 70
+  },
+  {
+    "type": "push",
+    "value": 105
+  },
+  {
+    "type": "push",
+    "value": 110
+  },
+  {
+    "type": "push",
+    "value": 105
+  },
+  {
+    "type": "push",
+    "value": 115
+  },
+  {
+    "type": "push",
+    "value": 104
+  },
+  {
+    "type": "push",
+    "value": 105
+  },
+  {
+    "type": "push",
+    "value": 110
+  },
+  {
+    "type": "push",
+    "value": 103
+  },
+  {
+    "type": "push",
+    "value": 32
+  },
+  {
+    "type": "push",
+    "value": 112
+  },
+  {
+    "type": "push",
+    "value": 114
+  },
+  {
+    "type": "push",
+    "value": 111
+  },
+  {
+    "type": "push",
+    "value": 103
+  },
+  {
+    "type": "push",
+    "value": 114
+  },
+  {
+    "type": "push",
+    "value": 97
+  },
+  {
+    "type": "push",
+    "value": 109
+  },
+  {
+    "type": "push",
+    "value": 46
+  },
+  {
+    "type": "push",
+    "value": 23
+  },
+  {
+    "type": "push",
+    "value": 0
+  },
+  {
+    "type": "system"
+  },
+  {
+    "type": "exit"
+  }
+]
