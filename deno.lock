@@ -294,6 +294,7 @@
     "https://esm.sh/acorn-typescript@1.3.1": "d52d1557854d75e994d4d5a1aff80d187f208a2a8dc6991334e77df72bfd62a7",
     "https://esm.sh/acorn@8.8.2": "885661f255b7cc7f8ccf1b05e979f53a08bc0907b07714c23b6ed86d3b4cb87e",
     "https://esm.sh/express@4.18.2": "7b6fa8e345c098e59accc219fc3660ae456bcdbb0959099295863b6b789ea298",
+    "https://esm.sh/typescript@5.1.3": "75580707e8c29a07fe19bcaae6e9d389aee065ce5fa005a1f111ddb02d25e821",
     "https://esm.sh/v124/@types/body-parser@1.19.2/index.d.ts": "05a7ef0e08435b261fd7c85763f32bfe978b0c5d9614e78785c89e46031d8ee7",
     "https://esm.sh/v124/@types/connect@3.4.35/index.d.ts": "9668865616a72c8969a6b4ba7ced7c697c05027ab7590a5d6f661649a64ebccd",
     "https://esm.sh/v124/@types/estree@1.0.1/index.d.ts": "bee89e1eb6425eb49894f3f25e4562dc2564e84e5aa7610b7e13d8ecddf8f5db",
@@ -378,7 +379,13 @@
     "https://esm.sh/v124/type-is@1.6.18/deno/type-is.mjs": "6473926eb7ce8f58ae9bdfe79d11f736d36c562be38ef54915cb86d7b9ba0894",
     "https://esm.sh/v124/unpipe@1.0.0/deno/unpipe.mjs": "92f91c516a474e4abeac1f58b7e6eb150979e26a67b599bc399757781b6e8523",
     "https://esm.sh/v124/utils-merge@1.0.1/deno/utils-merge.mjs": "728c4329fd527fb9e9972d42a50a37a059bbfbaab48c1af42624c39bf3294415",
-    "https://esm.sh/v124/vary@1.1.2/deno/vary.mjs": "bfceabdb74a3f7ff5bc1d7b834d4687ef1b9fa105ae719e4e1d3e494f33b1931"
+    "https://esm.sh/v124/vary@1.1.2/deno/vary.mjs": "bfceabdb74a3f7ff5bc1d7b834d4687ef1b9fa105ae719e4e1d3e494f33b1931",
+    "https://esm.sh/v126/buffer-from@1.1.2/denonext/buffer-from.mjs": "38f0f3d7a732dac24b7960011227d24e6ebef03407302fe3fa20db005d0f34a8",
+    "https://esm.sh/v126/node_inspector.js": "c45566d90f93c4a12cc70cb4de9b8c926fa6250ca63e1483c71d62237d78777c",
+    "https://esm.sh/v126/source-map-support@0.5.21/denonext/source-map-support.mjs": "58915925ff6d68769cab934dc2dfce981ed5777b8b9910b536138e22cec3ba25",
+    "https://esm.sh/v126/source-map@0.6.1/denonext/source-map.mjs": "ccff3bb06dea7c01a2c83cf12113697592e418fd06b55ae2bb4cb0a4e51a98b8",
+    "https://esm.sh/v126/typescript@5.1.3/denonext/typescript.mjs": "a006b36b7735b6d1e5ab5001f55db6dc217457fa2b84180e9fab32e1ed509571",
+    "https://esm.sh/v126/typescript@5.1.3/lib/typescript.d.ts": "e0adb35456ece2770ea000447ab6dff4e6af90070a1bfd5901c470be1021cb89"
   },
   "npm": {
     "specifiers": {

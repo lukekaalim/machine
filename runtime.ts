@@ -1,7 +1,10 @@
 import { MachineProgramCompilation } from "./compiler.ts";
 import { encodeDiscard, writeStackAtOffset } from "./hello_world.ts";
 import { dump } from "./memory.ts";
-import { MachineOperation, add, dup, encodeOperation, exit, peek, push, read, swap, write } from "./operations.ts";
+import {
+  MachineOperation, add, dup, encodeOperation,
+  exit, peek, push, read, swap, write
+} from "./operations.ts";
 import { MachineExecutable } from "./system.ts";
 
 export type RuntimeStruct = ReadonlyArray<readonly [string]>;
@@ -47,17 +50,6 @@ export const link = (
   const lookup = calculateLookup(compilation.dataBlocks);
   const program = compilation.operations.map(encodeOperation).flat(1);
 
-  /*
-  console.log('COMPILATION')
-  console.log(compilation);
-  console.log('DATA');
-  dump(data);
-  console.log('LOOKUP');
-  dump(lookup);
-  console.log('PROGRAM');
-  dump(program);
-  */
-
   const companionStructures = [
     data,
     lookup,
@@ -80,10 +72,6 @@ export const link = (
     dataOffset: dataOffset - companionBytes.length,
     allocationOffset: runtimeBytesLength
   })
-  /*
-  console.log("RUNTIME"),
-  dump(runtime);
-  */
 
   const memory = [
     // first byte is "runtime address"

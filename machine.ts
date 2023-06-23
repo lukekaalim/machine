@@ -6,7 +6,10 @@ export type MachineState = {
   memory: number[],
 };
 
-export const performOperation = (operation: MachineOperation, state: MachineState): MachineState => {
+export const performOperation = (
+  operation: MachineOperation,
+  state: MachineState,
+): MachineState => {
   const stack = [...state.stack];
   let pointer = state.pointer + 1;
 
@@ -38,7 +41,7 @@ export const performOperation = (operation: MachineOperation, state: MachineStat
         throw new Error();
       const value = stack[stack.length - 1 - offset];
       if (value === undefined)
-        throw new Error();
+        throw new Error(`OUT OF BOUNDS STACK READ (reading index ${stack.length - 1 - offset})`);
       stack.push(value);
       return { ...state, stack, pointer };
     }
@@ -87,10 +90,8 @@ export const performOperation = (operation: MachineOperation, state: MachineStat
       return { ...state, stack, pointer };
     }
     case 'exit':
+    case 'super':
       return state;
-    case 'noop':
-      pointer++;
-      return { ...state, pointer };
     default:
       throw new Error();
   }

@@ -109,7 +109,9 @@ export type MachineSystem = {
   dump: () => void,
 };
 
-export const createSystem = (): MachineSystem => {
+export const createSystem = (
+  handleSupervisorCall: (state: MachineState) => MachineState,
+): MachineSystem => {
   let state: MachineState = {
     stack: [],
     memory: [
@@ -127,11 +129,10 @@ export const createSystem = (): MachineSystem => {
     const offset = state.memory.length;
     state.memory = [state.memory, executable.memory].flat(1);
     state.stack = [offset];
-    if (executable.entry)
+    if (executable.entry !== null)
       state.pointer = offset + executable.entry;
   }
   const cycles: any[] = [];
-  const syscalls: any[] = []
 
   const run = () => {
     try {
@@ -140,16 +141,9 @@ export const createSystem = (): MachineSystem => {
         cycles.push([state.pointer, opToString(op), state.stack]);
         if (op.type === 'exit')
           break;
-        if (state.memory[1] !== 0) {
-          const syscall = decodeSystemOperation(state.memory[1], state.memory);
-          syscalls.push({
-            cycle: cycles.length - 2,
-            address: state.memory[1],
-            ...syscall
-          });
-          handleSystemCall(syscall, state);
-          state.memory[1] = 0;
-        }
+        if (op.type === 'super')
+          state = handleSupervisorCall(state)
+  
         state = runMachine(state);
       }
     } catch (error) {
@@ -168,8 +162,6 @@ export const createSystem = (): MachineSystem => {
     dump(state.memory);
     console.log('CYCLES')
     console.table(cycles);
-    console.log('SYSCALLS')
-    console.table(syscalls);
   }
 
   return {
