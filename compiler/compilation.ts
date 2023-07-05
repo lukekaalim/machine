@@ -1,17 +1,21 @@
-import { ScriptTarget, createSourceFile } from "https://esm.sh/typescript@5.1.3";
+import { ScriptTarget, createSourceFile, SourceFile } from "https://esm.sh/typescript@5.1.3";
 import { MachineExecutable } from "../system.ts";
 import { buildGraph, findJSValues } from "./syntaxTree.ts"
+import { generateSourceMap, SourceMap } from './sourcemap.ts';
 import { Data, buildData, generateDataBytes } from "./data.ts";
 import { getStructBytes, runtimeStructure } from "../runtime.ts";
-import { CompilerGraphNode, CompilerGraphState, compileGraph } from "./graph.ts";
+import { CompilerGraphNode, CompilerGraphState, compileGraph, graph } from "./graph.ts";
 import { graphRuntimeInitialisation, vars } from "./runtime.ts";
-import { encodeOperation } from "../operations.ts";
+import { MachineOperation, encodeOperation, exit } from "../operations.ts";
 
 export type CompilationResult = {
   data: Data,
   programGraph: CompilerGraphNode,
   executable: MachineExecutable,
-  runtimeValues: { [prop: string]: number }
+  runtimeValues: { [prop: string]: number },
+  sourceMap: SourceMap,
+  sourceFile: SourceFile,
+  operations: readonly MachineOperation[],
 };
 
 export const generateCompilation = (sourceCode: string): CompilationResult => {
@@ -20,7 +24,10 @@ export const generateCompilation = (sourceCode: string): CompilationResult => {
   const jsValues = findJSValues(sourceFile);
   const data = buildData(jsValues, runtimeStructure.length);
   const dataBytes = generateDataBytes(data);
-  const sourceGraph = buildGraph(sourceFile, data);
+  const sourceGraph = graph.order(
+    buildGraph(sourceFile, data),
+    graph.op(exit()),
+  );
   
   const programGraph = graphRuntimeInitialisation(sourceGraph);
   const graphState: CompilerGraphState = {
@@ -28,7 +35,10 @@ export const generateCompilation = (sourceCode: string): CompilationResult => {
     stackVariables: new Map([[vars.execAddress, 0]])
   };
 
-  const programBytes = compileGraph(programGraph, graphState)
+  const operations = compileGraph(programGraph, graphState);
+  const sourceMap = generateSourceMap(programGraph);
+
+  const programBytes = operations
     .map(encodeOperation)
     .flat(1)
 
@@ -45,8 +55,6 @@ export const generateCompilation = (sourceCode: string): CompilationResult => {
     ...runtimeStructureBytes,
     ...dataBytes,
     ...programBytes,
-    // and some free memory from the allocator!
-    Array.from({ length: 1024 }).map(() => 0),
   ].flat(1)
 
   const entry = runtimeStructure.length + dataBytes.length;
@@ -60,5 +68,8 @@ export const generateCompilation = (sourceCode: string): CompilationResult => {
     programGraph,
     runtimeValues,
     data,
+    sourceFile,
+    operations,
+    sourceMap,
   };
 };

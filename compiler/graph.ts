@@ -1,33 +1,48 @@
-import { encodeDiscard } from "../hello_world.ts";
-import { MachineOperation, peek, push } from "../operations.ts";
+import { MachineOperation, peek, push, swap, write } from "../operations.ts";
+import { Node } from 'https://esm.sh/typescript@5.1.3';
 
 export type CompilerGraphNode =
   | { type: 'set-stack-variable', id: string, loadValue: CompilerGraphNode, withVariable: CompilerGraphNode }
   | { type: 'get-stack-variable', id: string }
   | { type: 'machine-op', inputs: CompilerGraphNode[], operation: MachineOperation }
   | { type: 'ordered-nodes', nodes: CompilerGraphNode[] }
-  | { type: 'source-label', label: string, node: CompilerGraphNode }
+  | { type: 'source-label-start', id: string, sourceMapNode: SourceMapNode, startNode: CompilerGraphNode }
+  | { type: 'source-label-end', id: string, endNode: CompilerGraphNode }
+
+export type SourceMapNode =
+  | { type: 'syntax', syntaxNode: Node }
+  | { type: 'graph', graphNode: CompilerGraphNode }
+  | { type: 'special', description: string }
 
 export type CompilerGraphState = {
   stackVariables: Map<string, number>
   stackDepth: number,
 };
 
+export const setStackVariableInstructions = [
+  swap(),
+  push(0),
+  swap(),
+  write(),
+]
+
 export const compileGraph = (
   node: CompilerGraphNode,
   state: CompilerGraphState,
 ): MachineOperation[] => {
   switch (node.type) {
-    case 'machine-op':
+    case 'machine-op': {
+      const loadInputs = node.inputs.map((node, index) => {
+        const nextState = { ...state, stackDepth: state.stackDepth + index };
+        return compileGraph(node, nextState);
+      })
+      .flat(1);
+      
       return [
-        node.inputs
-          .map((node, index) => {
-            const nextState = { ...state, stackDepth: state.stackDepth + index };
-            return compileGraph(node, nextState);
-          })
-          .flat(1),
+        loadInputs,
         node.operation,
       ].flat(1);
+    }
     case 'set-stack-variable': {
       const nextState = {
         ...state,
@@ -37,24 +52,33 @@ export const compileGraph = (
       return [
         compileGraph(node.loadValue, state),
         compileGraph(node.withVariable, nextState),
-        encodeDiscard(),
+        swap(),
+        push(0),
+        swap(),
+        write(),
       ].flat(1);
     }
     case 'get-stack-variable': {
       const variableDepth = state.stackVariables.get(node.id);
       if (variableDepth === undefined)
         throw new Error(`Missing stack variable: ${node.id}`);
-        const variableOffset = (state.stackDepth - variableDepth) - 1;
+      const variableOffset = (state.stackDepth - variableDepth) - 1;
 
       return [
         push(variableOffset),
         peek(),
-      ];
+      ]
     }
     case 'ordered-nodes': {
       return node.nodes
         .map(node => compileGraph(node, state))
         .flat(1);
+    }
+    case 'source-label-start': {
+      return compileGraph(node.startNode, state);
+    }
+    case 'source-label-end': {
+      return compileGraph(node.endNode, state);
     }
     default:
       throw new Error();
@@ -94,3 +118,26 @@ export const graphGetVariable = (
 ): CompilerGraphNode => {
   return { type: 'get-stack-variable', id };
 }
+
+export const graphLabelStart = (
+  startNode: CompilerGraphNode,
+  sourceMapNode: SourceMapNode,
+  id: string,
+): CompilerGraphNode => {
+  return { type: 'source-label-start', startNode, sourceMapNode, id };
+}
+export const graphLabelEnd = (
+  endNode: CompilerGraphNode,
+  id: string,
+): CompilerGraphNode => {
+  return { type: 'source-label-end', endNode, id };
+}
+
+export const graph = {
+  get: graphGetVariable,
+  set: graphSetVariable,
+  op: graphOperation,
+  order: graphOrder,
+  labelStart: graphLabelStart,
+  labelEnd: graphLabelEnd,
+};

@@ -90,6 +90,8 @@ export const performOperation = (
       return { ...state, stack, pointer };
     }
     case 'exit':
+      pointer = 0;
+      return { ...state, pointer };
     case 'super':
       return state;
     default:

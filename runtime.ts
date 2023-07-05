@@ -1,5 +1,4 @@
 import { MachineProgramCompilation } from "./compiler.ts";
-import { encodeDiscard, writeStackAtOffset } from "./hello_world.ts";
 import { dump } from "./memory.ts";
 import {
   MachineOperation, add, dup, encodeOperation,

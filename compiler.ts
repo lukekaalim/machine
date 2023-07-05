@@ -5,11 +5,10 @@ import {
   Program, Statement, UnaryExpression, VariableDeclaration, VariableDeclarator
 } from "https://esm.sh/v124/@types/estree@1.0.1/index.d.ts";
 
-import { encodeDiscard, encodeWriteFile } from "./hello_world.ts";
 import { MachineOperation, add, decodeOperation, dup, encodeOperation, exit, jump, mult, peek, push, read, swap, write } from "./operations.ts";
-import { fsSyscallStructure, runProgram, systemStateStructure } from "./system.ts";
-import { encode } from "https://deno.land/std@0.50.0/encoding/utf8.ts";
-import { RuntimeStruct, encodeAllocate, encodeLoadDataAddress, encodeReadStructField, encodeRuntimeInitialization, encodeTypeLength, encodeWriteStructField, runtimeStackStructure, runtimeStructure, valueStructure } from "./runtime.ts";
+import { fsSyscallStructure, systemStateStructure } from "./system.ts";
+import { encode } from 'https://deno.land/std@0.50.0/encoding/utf8.ts';
+import { encodeAllocate, encodeLoadDataAddress, encodeReadStructField, encodeRuntimeInitialization, encodeTypeLength, encodeWriteStructField, runtimeStackStructure, runtimeStructure, valueStructure } from "./runtime.ts";
 
 export type MachineProgramCompilation = {
   strings: Map<string, number>,

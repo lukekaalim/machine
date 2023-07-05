@@ -1,4 +1,4 @@
-import { decode } from "https://deno.land/std@0.50.0/encoding/utf8.ts";
+import { decode } from 'https://deno.land/std@0.50.0/encoding/utf8.ts';
 import { MachineState } from "../machine.ts";
 import { SystemOperation } from "../system.ts";
 

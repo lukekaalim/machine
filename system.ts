@@ -1,5 +1,4 @@
-import { decode, encode } from "https://deno.land/std@0.50.0/encoding/utf8.ts";
-import { readline } from "https://deno.land/x/readline@v1.1.0/mod.ts";
+import { decode, encode } from 'https://deno.land/std@0.50.0/encoding/utf8.ts';
 import { MachineOperation, decodeOperation, encodeOperation } from "./operations.ts";
 import { MachineState, runMachine } from "./machine.ts";
 import { RuntimeStruct, getStructBytes } from "./runtime.ts";
@@ -11,7 +10,11 @@ export const systemStateStructure: RuntimeStruct = [
   ['nullPointerValue'],
   ['systemCallArgumentAddress'],
   ['memorySize'],
-  ['randomAddress']
+  ['randomAddress'],
+  ['instructionPointer'],
+  ['_'],
+  ['_'],
+  ['_']
 ] as const;
 
 export type SystemState = {
@@ -103,10 +106,9 @@ export type MachineExecutable = {
 };
 
 export type MachineSystem = {
-  load: (executable: MachineExecutable) => void,
-  run: () => void,
-
-  dump: () => void,
+  load: (executable: MachineExecutable) => MachineState,
+  run: () => MachineState,
+  step: () => MachineState,
 };
 
 export const createSystem = (
@@ -120,6 +122,7 @@ export const createSystem = (
         systemCallArgumentAddress: 0,
         memorySize: systemStateStructure.length,
         randomAddress: 0,
+        instructionPointer: 0,
       })
     ].flat(1),
     pointer: 0
@@ -127,47 +130,38 @@ export const createSystem = (
 
   const load = (executable: MachineExecutable) => {
     const offset = state.memory.length;
-    state.memory = [state.memory, executable.memory].flat(1);
+    state.memory = [state.memory, executable.memory, Array.from({ length: 32 }).map(_ => 0)].flat(1);
     state.stack = [offset];
     if (executable.entry !== null)
       state.pointer = offset + executable.entry;
+    state.memory[systemStateStructure.findIndex(x => x[0] === 'instructionPointer')] = state.pointer;
+    return state;
   }
-  const cycles: any[] = [];
+
+  const postStep = () => {
+    const op = decodeOperation(state.pointer, state.memory);
+    if (op.type === 'super')
+      state = handleSupervisorCall(state)
+  
+    state.memory[systemStateStructure.findIndex(x => x[0] === 'instructionPointer')] = state.pointer;
+    return op;
+  }
 
   const run = () => {
-    try {
-      while (state.pointer !== 0) {
-        const op = decodeOperation(state.pointer, state.memory);
-        cycles.push([state.pointer, opToString(op), state.stack]);
-        if (op.type === 'exit')
-          break;
-        if (op.type === 'super')
-          state = handleSupervisorCall(state)
-  
-        state = runMachine(state);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    while (state.pointer !== 0)
+      step();
+    return state;
   }
-
-  const opToString = (op: MachineOperation) => {
-    if (op.type === 'push')
-      return `${op.type}(${op.value})`;
-    return `${op.type}`;
-  }
-
-  const systemDump = () => {
-    console.log('SYSTEM MEMORY')
-    dump(state.memory);
-    console.log('CYCLES')
-    console.table(cycles);
-  }
+  const step = () => {
+    state = runMachine(state);
+    postStep();
+    return state;
+  };
 
   return {
     load,
     run,
-    dump: systemDump,
+    step,
   }
 };
 

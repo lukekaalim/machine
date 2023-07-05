@@ -1,23 +1,17 @@
-import { sys } from "https://esm.sh/typescript@5.1.3";
-import { generateRuntimeStructureBytes } from "../compiler.ts";
 import { generateCompilation } from "../compiler/compilation.ts";
-import { compileGraph, graphOperation } from "../compiler/graph.ts";
-import { graphRuntimeInitialisation, vars } from "../compiler/runtime.ts";
-import { buildGraph } from "../compiler/syntaxTree.ts";
-import { encodeOperation, exit } from "../operations.ts";
-import { getStructBytes, link, runtimeStructure } from "../runtime.ts";
-import { MachineExecutable, createSystem, runProgram } from "../system.ts";
+import { createSystem } from "../system.ts";
 import { MachineState } from "../machine.ts";
-import { decode } from "https://deno.land/std@0.50.0/encoding/utf8.ts";
+import { decode } from 'https://deno.land/std@0.50.0/encoding/utf8.ts';
 
-const { executable, data, programGraph, runtimeValues } = generateCompilation(`
-malloc(10);
+const { executable, instructions } = generateCompilation(`
+const a = 0;
 `);
 
-console.table(runtimeValues)
-console.log(data);
-console.table(executable.memory.slice(0, runtimeValues.allocationOffset))
-Deno.writeTextFileSync('graph.json', JSON.stringify(programGraph, null, 2));
+console.log(instructions.map(i => {
+  if (i.type === 'push')
+    return `push ${i.value}`;
+  return i.type;
+}).join('\n'))
 
 const handleSupervisorCall = (state: MachineState) => {
   state.pointer +=1;

@@ -12,3 +12,6 @@ on the stack.
 
 ## Stack Variables
 
+## Syntax Tree
+
+Transform a syntax tree into a compiler graph.

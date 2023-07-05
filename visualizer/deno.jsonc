@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "dev": "deno run -A --watch hello_world.ts"
+    "dev": "deno run -A npm:vite --port 8080"
   },
   "compilerOptions": {
     "lib": [

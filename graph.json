@@ -1,0 +1,147 @@
+{
+  "type": "set-stack-variable",
+  "id": "RUNTIME_STRUCT_ADDRESS",
+  "loadValue": {
+    "type": "get-stack-variable",
+    "id": "EXECUTABLE_MEMORY_ADDRESS"
+  },
+  "withVariable": {
+    "type": "set-stack-variable",
+    "id": "LOOKUP_ADDRESS",
+    "loadValue": {
+      "type": "machine-op",
+      "inputs": [
+        {
+          "type": "machine-op",
+          "inputs": [
+            {
+              "type": "machine-op",
+              "inputs": [
+                {
+                  "type": "get-stack-variable",
+                  "id": "RUNTIME_STRUCT_ADDRESS"
+                },
+                {
+                  "type": "machine-op",
+                  "inputs": [],
+                  "operation": {
+                    "type": "push",
+                    "value": 1
+                  }
+                }
+              ],
+              "operation": {
+                "type": "add"
+              }
+            }
+          ],
+          "operation": {
+            "type": "read"
+          }
+        },
+        {
+          "type": "get-stack-variable",
+          "id": "RUNTIME_STRUCT_ADDRESS"
+        }
+      ],
+      "operation": {
+        "type": "add"
+      }
+    },
+    "withVariable": {
+      "type": "set-stack-variable",
+      "id": "DATA_ADDRESS",
+      "loadValue": {
+        "type": "machine-op",
+        "inputs": [
+          {
+            "type": "machine-op",
+            "inputs": [
+              {
+                "type": "machine-op",
+                "inputs": [
+                  {
+                    "type": "get-stack-variable",
+                    "id": "RUNTIME_STRUCT_ADDRESS"
+                  },
+                  {
+                    "type": "machine-op",
+                    "inputs": [],
+                    "operation": {
+                      "type": "push",
+                      "value": 2
+                    }
+                  }
+                ],
+                "operation": {
+                  "type": "add"
+                }
+              }
+            ],
+            "operation": {
+              "type": "read"
+            }
+          },
+          {
+            "type": "get-stack-variable",
+            "id": "RUNTIME_STRUCT_ADDRESS"
+          }
+        ],
+        "operation": {
+          "type": "add"
+        }
+      },
+      "withVariable": {
+        "type": "set-stack-variable",
+        "id": "a",
+        "loadValue": {
+          "type": "machine-op",
+          "inputs": [
+            {
+              "type": "get-stack-variable",
+              "id": "RUNTIME_STRUCT_ADDRESS"
+            },
+            {
+              "type": "machine-op",
+              "inputs": [
+                {
+                  "type": "machine-op",
+                  "inputs": [
+                    {
+                      "type": "get-stack-variable",
+                      "id": "LOOKUP_ADDRESS"
+                    },
+                    {
+                      "type": "machine-op",
+                      "inputs": [],
+                      "operation": {
+                        "type": "push",
+                        "value": 0
+                      }
+                    }
+                  ],
+                  "operation": {
+                    "type": "add"
+                  }
+                }
+              ],
+              "operation": {
+                "type": "read"
+              }
+            }
+          ],
+          "operation": {
+            "type": "add"
+          }
+        },
+        "withVariable": {
+          "type": "machine-op",
+          "inputs": [],
+          "operation": {
+            "type": "exit"
+          }
+        }
+      }
+    }
+  }
+}

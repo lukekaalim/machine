@@ -1,0 +1,132 @@
+get-stack-variable(EXECUTABLE_MEMORY_ADDRESS) {
+	set-stack-variable(RUNTIME_STRUCT_ADDRESS)-load-value {
+		set-stack-variable(RUNTIME_STRUCT_ADDRESS) {
+			{"type":"push","value":0}
+			{"type":"peek"}
+		} get-stack-variable(EXECUTABLE_MEMORY_ADDRESS)
+	} set-stack-variable(RUNTIME_STRUCT_ADDRESS)-load-value
+get-stack-variable(RUNTIME_STRUCT_ADDRESS) {
+	machine-op-arg-0 {
+		machine-op(add) {
+			machine-op-arg-0 {
+				machine-op(read) {
+					machine-op-arg-0 {
+						machine-op(add) {
+							set-stack-variable(LOOKUP_ADDRESS)-load-value {
+								set-stack-variable(LOOKUP_ADDRESS) {
+									set-stack-variable(RUNTIME_STRUCT_ADDRESS)-with-variable {
+											{"type":"push","value":0}
+											{"type":"peek"}
+										} get-stack-variable(RUNTIME_STRUCT_ADDRESS)
+									} machine-op-arg-0
+machine-op(push) {
+	machine-op-arg-1 {
+											{"type":"push","value":1}
+										} machine-op(push)
+									} machine-op-arg-1
+									{"type":"add"}
+								} machine-op(add)
+							} machine-op-arg-0
+							{"type":"read"}
+						} machine-op(read)
+					} machine-op-arg-0
+get-stack-variable(RUNTIME_STRUCT_ADDRESS) {
+	machine-op-arg-1 {
+							{"type":"push","value":1}
+							{"type":"peek"}
+						} get-stack-variable(RUNTIME_STRUCT_ADDRESS)
+					} machine-op-arg-1
+					{"type":"add"}
+				} machine-op(add)
+			} set-stack-variable(LOOKUP_ADDRESS)-load-value
+get-stack-variable(RUNTIME_STRUCT_ADDRESS) {
+	machine-op-arg-0 {
+		machine-op(add) {
+			machine-op-arg-0 {
+				machine-op(read) {
+					machine-op-arg-0 {
+						machine-op(add) {
+							set-stack-variable(DATA_ADDRESS)-load-value {
+								set-stack-variable(DATA_ADDRESS) {
+									set-stack-variable(LOOKUP_ADDRESS)-with-variable {
+													{"type":"push","value":1}
+													{"type":"peek"}
+												} get-stack-variable(RUNTIME_STRUCT_ADDRESS)
+											} machine-op-arg-0
+machine-op(push) {
+	machine-op-arg-1 {
+													{"type":"push","value":2}
+												} machine-op(push)
+											} machine-op-arg-1
+											{"type":"add"}
+										} machine-op(add)
+									} machine-op-arg-0
+									{"type":"read"}
+								} machine-op(read)
+							} machine-op-arg-0
+get-stack-variable(RUNTIME_STRUCT_ADDRESS) {
+	machine-op-arg-1 {
+									{"type":"push","value":2}
+									{"type":"peek"}
+								} get-stack-variable(RUNTIME_STRUCT_ADDRESS)
+							} machine-op-arg-1
+							{"type":"add"}
+						} machine-op(add)
+					} set-stack-variable(DATA_ADDRESS)-load-value
+get-stack-variable(RUNTIME_STRUCT_ADDRESS) {
+	machine-op-arg-0 {
+		machine-op(add) {
+			set-stack-variable(a)-load-value {
+				set-stack-variable(a) {
+					set-stack-variable(DATA_ADDRESS)-with-variable {
+											{"type":"push","value":2}
+											{"type":"peek"}
+										} get-stack-variable(RUNTIME_STRUCT_ADDRESS)
+									} machine-op-arg-0
+get-stack-variable(LOOKUP_ADDRESS) {
+	machine-op-arg-0 {
+		machine-op(add) {
+			machine-op-arg-0 {
+				machine-op(read) {
+					machine-op-arg-1 {
+															{"type":"push","value":2}
+															{"type":"peek"}
+														} get-stack-variable(LOOKUP_ADDRESS)
+													} machine-op-arg-0
+machine-op(push) {
+	machine-op-arg-1 {
+															{"type":"push","value":0}
+														} machine-op(push)
+													} machine-op-arg-1
+													{"type":"add"}
+												} machine-op(add)
+											} machine-op-arg-0
+											{"type":"read"}
+										} machine-op(read)
+									} machine-op-arg-1
+									{"type":"add"}
+								} machine-op(add)
+							} set-stack-variable(a)-load-value
+machine-op(exit) {
+	set-stack-variable(a)-with-variable {
+									{"type":"exit"}
+								} machine-op(exit)
+							} set-stack-variable(a)-with-variable
+							{"type":"push","value":0}
+							{"type":"swap"}
+							{"type":"write"}
+						} set-stack-variable(a)
+					} set-stack-variable(DATA_ADDRESS)-with-variable
+					{"type":"push","value":0}
+					{"type":"swap"}
+					{"type":"write"}
+				} set-stack-variable(DATA_ADDRESS)
+			} set-stack-variable(LOOKUP_ADDRESS)-with-variable
+			{"type":"push","value":0}
+			{"type":"swap"}
+			{"type":"write"}
+		} set-stack-variable(LOOKUP_ADDRESS)
+	} set-stack-variable(RUNTIME_STRUCT_ADDRESS)-with-variable
+	{"type":"push","value":0}
+	{"type":"swap"}
+	{"type":"write"}

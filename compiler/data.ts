@@ -1,4 +1,4 @@
-import { encode } from "https://deno.land/std@0.50.0/encoding/utf8.ts";
+import { encode } from 'https://deno.land/std@0.50.0/encoding/utf8.ts';
 import { add, push, read } from "../operations.ts";
 import { CompilerGraphNode, graphGetVariable, graphOperation } from "./graph.ts";
 import { vars } from "./runtime.ts";

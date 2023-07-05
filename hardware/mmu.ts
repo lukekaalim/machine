@@ -1,5 +1,5 @@
 export type MemoryPage = {
-
+  
 };
 
 export type MemoryManagementUnit = {
