@@ -1,4 +1,4 @@
-import { push, write, add } from "../operations.ts"
+import { push, write, add, read } from "../operations.ts"
 import { graphAllocateRuntimeMemory, vars } from './runtime.ts';
 import { CompilerGraphNode, graph } from "./graph.ts"
 import { graphStructFieldAddress } from "./struct.ts"
@@ -18,7 +18,10 @@ export const valueStructure = [
 ] as const;
 
 export const graphLoadNumber = (loadValueAddress: CompilerGraphNode): CompilerGraphNode => {
-  return graphStructFieldAddress(valueStructure, loadValueAddress, 'value');
+  return graph.op(
+    read(),
+    graphStructFieldAddress(valueStructure, loadValueAddress, 'value')
+  )
 }
 
 export const graphAllocateNumberValue = (loadNumber: CompilerGraphNode): CompilerGraphNode => {

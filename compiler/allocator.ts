@@ -22,7 +22,10 @@ export const graphMalloc = (
           graphGetVariable('ALLOC_OFFSET'),
         ),
       ),
-      graphOperation(dup())
+      graphOperation(add(),
+        graphGetVariable('ALLOC_OFFSET'),
+        graphGetVariable(vars.runtimeAddress),
+      )
     )
   );
 }

@@ -1,6 +1,6 @@
 import { Component, h, useRef, useState } from "https://esm.sh/@lukekaalim/act@2.6.0"
 import { render } from "https://esm.sh/@lukekaalim/act-web@2.3.0";
-import { RuntimeMemoryVisualizer, readStructFromMemory } from './memory.ts';
+import { RuntimeMemoryVisualizer, readStructFromMemory, MemoryTable } from './memory.ts';
 import { StackVisualizer } from './stack.ts';
 import { generateCompilation } from '../compiler/mod.ts';
 import { createSystem, systemStateStructure } from '../system.ts';
@@ -13,8 +13,12 @@ import { RuntimeStruct, runtimeStructure } from '../runtime.ts';
 const { executable, operations, sourceMap, sourceFile, programGraph } = generateCompilation(`
 const a = 5;
 const b = 10;
-const c = malloc(10);
-const d = malloc(0);
+test();
+test();
+test();
+test();
+const myAlloc = malloc(8);
+test();
 `);
 const system = createSystem(x => x);
 const initialMachineState = system.load(executable);
@@ -22,9 +26,14 @@ const initialMachineState = system.load(executable);
 const states: MachineState[] = [{...initialMachineState, memory: [...initialMachineState.memory]}];
 let state = initialMachineState;
 while (state.pointer !== 0) {
-  const nextState = system.step()
-  states.push({ ...nextState, memory: [...nextState.memory] });
-  state = nextState;
+  try {
+    const nextState = system.step()
+    states.push({ ...nextState, memory: [...nextState.memory] });
+    state = nextState;
+  } catch (error) {
+    console.error(error);
+    state.pointer = 0;
+  }
 }
 
 export const Viualizer: Component = () => {
@@ -51,6 +60,7 @@ export const Viualizer: Component = () => {
     }),
     h('div', { style: { display: 'flex' }}, [
       h(StackVisualizer, { stack: state.stack }),
+      h(MemoryTable, { memory: state.memory, highlightAddresses: new Set([instructionPointer]) }),
       h(RuntimeMemoryVisualizer, { memory: state.memory, runtimeAddress: 8 }),
     ]),
     h(SourceMapVisualizer, { operations, sourceMap, sourceFile, programGraph, programPointer }),

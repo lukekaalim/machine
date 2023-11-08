@@ -27,6 +27,7 @@ import {
 } from "./data.ts";
 import { JSValue, graphLoadNumber, graphAllocateNumberValue } from "./value.ts";
 import { graphAllocateRuntimeMemory } from "./runtime.ts";
+import { graphMallocIncrements } from './internalFunctions/mod.ts';
 
 export const graphSystemCall = (...args: CompilerGraphNode[]) => {
   return graphOperation(supervisor(), ...args);
@@ -73,6 +74,8 @@ export const buildGraph = (file: SourceFile, data: Data): CompilerGraphNode => {
               graphLoadNumber(buildExpressionGraph(expression.arguments[0]))
             )
           );
+        if (expression.expression.text === "test")
+          return graphMallocIncrements();
       }
     }
     return graphOperation(push(1));
@@ -85,8 +88,8 @@ export const buildGraph = (file: SourceFile, data: Data): CompilerGraphNode => {
       return graphOrder(
         graphOperation(
           write(),
+          graphOperation(push(0)),
           buildExpressionGraph(statement.expression),
-          graphOperation(push(0))
         ),
         nextStatement
       );

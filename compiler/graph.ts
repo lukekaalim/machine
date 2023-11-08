@@ -6,6 +6,8 @@ export type CompilerGraphNode =
   | { type: 'get-stack-variable', id: string }
   | { type: 'machine-op', inputs: CompilerGraphNode[], operation: MachineOperation }
   | { type: 'ordered-nodes', nodes: CompilerGraphNode[] }
+  | { type: 'branch', loadCondition: CompilerGraphNode, trueBranch: CompilerGraphNode, falseBranch: CompilerGraphNode }
+  | { type: 'jump-table', loadIndex: CompilerGraphNode, entries: CompilerGraphNode[] }
   | { type: 'source-label-start', id: string, sourceMapNode: SourceMapNode, startNode: CompilerGraphNode }
   | { type: 'source-label-end', id: string, endNode: CompilerGraphNode }
 
@@ -17,6 +19,7 @@ export type SourceMapNode =
 export type CompilerGraphState = {
   stackVariables: Map<string, number>
   stackDepth: number,
+  operationMap: Map<CompilerGraphNode, MachineOperation[]>,
 };
 
 export const setStackVariableInstructions = [
@@ -25,6 +28,37 @@ export const setStackVariableInstructions = [
   swap(),
   write(),
 ]
+
+export const compileGraph2 = (
+  node: CompilerGraphNode,
+  state: CompilerGraphState,
+): CompilerGraphState => {
+  switch (node.type) {
+    case 'machine-op': {
+      const inputState = node.inputs.reduce((state, node, index) => {
+        return compileGraph2(node, { ...state, stackDepth: state.stackDepth + index });
+      }, state)
+      const operations = [
+        ...findOperationsFromNodes(node.inputs, inputState),
+        node.operation,
+      ];
+      const operationMap = new Map([
+        ...inputState.operationMap,
+        [node, operations]
+      ]);
+      return { ...inputState, operationMap, stackDepth: state.stackDepth };
+    }
+    case 'get-stack-variable':
+      
+    default:
+      throw new Error(`Unsupported node type`);
+  }
+}
+export const findOperationsFromNodes = (nodes: CompilerGraphNode[], state: CompilerGraphState) => {
+  return nodes.map(state.operationMap.get)
+    .filter((operations): operations is MachineOperation[] => !!operations)
+    .flat(1);
+}
 
 export const compileGraph = (
   node: CompilerGraphNode,

@@ -29,12 +29,16 @@ export const RuntimeMemoryVisualizer: Component<RuntimeMemoryVisualizerProps> = 
   const runtime = readStructFromMemory(runtimeStructure, runtimeAddress, memory);
 
   return [
-    h(MemoryTable, { memory }),
     h(ObjectTable, { object: runtime, name: 'runtime' })
   ];
 };
 
-const MemoryTable: Component<{ memory: number[] }> = ({ memory }) => {
+export type MemoryTableProps = {
+  memory: number[],
+  highlightAddresses?: Set<number>
+};
+
+export const MemoryTable: Component<MemoryTableProps> = ({ memory, highlightAddresses = new Set() }) => {
   const rowCount = Math.ceil(memory.length / 8);
 
   return h(Table, {
@@ -44,11 +48,21 @@ const MemoryTable: Component<{ memory: number[] }> = ({ memory }) => {
     rows: Array.from({ length: rowCount })
       .map((_, i) =>
         [h('pre', { style: memoryCellStyle }, i * 8), ...Array.from({ length: 8 }).map((_, o) => {
-          const index = memory[(i * 8) + o];
-          const style = {...memoryCellStyle, backgroundColor: colorHasher(index) };
-          return h('pre', { style }, index);
+          const index = (i * 8) + o;
+          const value = memory[index];
+          const style = {
+            ...memoryCellStyle,
+            backgroundColor: colorHasher(value),
+            ...(highlightAddresses.has(index) ? highlightMemoryCellStyle : {}),
+          };
+          return h('pre', { style }, value);
         })])
   });
+}
+
+const highlightMemoryCellStyle = {
+  backgroundColor: 'black',
+  color: 'white'
 }
 
 export const readStructFromMemory = (struct: RuntimeStruct, address: number, memory: number[]) => {

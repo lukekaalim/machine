@@ -163,6 +163,7 @@ export const SourceMapVisualizer: Component<SourceMapVisualizerProps> = ({
   )
   
   return [
+    h('pre', {}, JSON.stringify(currentOperation)),
     h('pre', {},
       h('div', { style: { display: 'flex' } }, [
         h('div', {}, [
@@ -180,6 +181,5 @@ export const SourceMapVisualizer: Component<SourceMapVisualizerProps> = ({
         h(CompilerGraphVisualizer, { compilerNode: programGraph, compilerSourceMap, currentOperationIndex }),
       ])
     ),
-    h('pre', {}, JSON.stringify(currentOperation))
   ];
 };
